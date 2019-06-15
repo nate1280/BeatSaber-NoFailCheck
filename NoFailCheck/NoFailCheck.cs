@@ -102,6 +102,9 @@ namespace NoFailCheck
                         gameplayModifierToggle.toggle.onValueChanged.RemoveListener(new UnityAction<bool>(HandleNoFailToggle));
                         gameplayModifierToggle.toggle.onValueChanged.AddListener(new UnityAction<bool>(HandleNoFailToggle));
 
+                        // set initial state
+                        NoFailEnabled = gameplayModifierToggle.toggle.isOn;
+
                         // setup default button state
                         SetButtonState(gameplayModifierToggle.toggle.isOn);
                     }
