@@ -35,6 +35,12 @@ namespace NoFailCheck
 
         public void OnApplicationStart()
         {
+            // create userdata path if needed
+            if (!Directory.Exists(DataPath))
+            {
+                Directory.CreateDirectory(DataPath);
+            }
+
             harmony = HarmonyInstance.Create("com.nate1280.BeatSaber.NoFailCheck");
             harmony.PatchAll(System.Reflection.Assembly.GetExecutingAssembly());
 
