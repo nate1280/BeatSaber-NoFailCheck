@@ -2,18 +2,9 @@
 using IPA;
 using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
-using System.Linq;
 using System.IO;
-using UnityEngine;
-using IPA.Utilities;
 using CustomUI.Utilities;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Diagnostics;
-using UnityEngine.UI;
-using CustomUI.MenuButton;
 using Harmony;
-using IPA.Config;
 
 namespace NoFailCheck
 {
