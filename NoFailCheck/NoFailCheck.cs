@@ -1,5 +1,6 @@
 ﻿using CustomUI.BeatSaber;
 using CustomUI.Settings;
+using CustomUI.Utilities;
 using NoFailCheck.Extensions;
 using System.Linq;
 using UnityEngine;
@@ -44,8 +45,26 @@ namespace NoFailCheck
         {
             initialized = false;
 
+            // remove potential for duplicate event calls
+            BSEvents.levelSelected -= BSEvents_levelSelected;
+
+            // attach to level selected event if we are enabled, and double presses are required
+            if (Plugin.cfg.Enabled && Plugin.cfg.DoublePress)
+            {
+                BSEvents.levelSelected += BSEvents_levelSelected;
+            }
+
             // setup settings
             SetupUI();
+        }
+
+        private void BSEvents_levelSelected(LevelPackLevelsViewController vc, IPreviewBeatmapLevel level)
+        {
+            if (NoFailPressCount != 0)
+            {
+                // reset press count
+                NoFailPressCount = 0;
+            }            
         }
 
         private void SetupUI()
