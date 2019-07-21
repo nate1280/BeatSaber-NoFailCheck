@@ -2,6 +2,7 @@
 using CustomUI.Settings;
 using CustomUI.Utilities;
 using NoFailCheck.Extensions;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
@@ -101,7 +102,7 @@ namespace NoFailCheck
             if (Plugin.cfg.Enabled)
             {
                 // get the play button
-                _playButton = Resources.FindObjectsOfTypeAll<Button>().First(x => x.name == "PlayButton");
+                _playButton = Resources.FindObjectsOfTypeAll<Button>().First(x => string.Equals(x.name, "PlayButton", StringComparison.OrdinalIgnoreCase) && string.Equals(x.transform.parent.name, "PlayButtons", StringComparison.OrdinalIgnoreCase) && string.Equals(x.transform.root.name, "Wrapper", StringComparison.OrdinalIgnoreCase));
 
                 // save default values
                 _playButtonText = _playButton.GetButtonText();
