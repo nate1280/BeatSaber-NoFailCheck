@@ -38,7 +38,7 @@ namespace NoFailCheck
         private Button _playButton;
         private string _playButtonText;
         private RectOffset _playButtonPadding;
-        private Color _playButtonColour;
+        //private Color _playButtonColour;
         private GameplayModifiersPanelController _gameplayModifiersPanelController;
         private GameplayModifierToggle[] _gameplayModifierToggles;
 
@@ -116,7 +116,7 @@ namespace NoFailCheck
                 foreach (var gameplayModifierToggle in _gameplayModifierToggles)
                 {
                     //Plugin.Log.Info($"{gameplayModifierToggle.gameplayModifier.name}");
-                    if (gameplayModifierToggle.gameplayModifier.modifierName == "MODIFIER_NO_FAIL")
+                    if (gameplayModifierToggle.gameplayModifier.name == "NoFailGameplayModifierParams")
                     {
                         // add listeners to modifier toggle
                         gameplayModifierToggle.toggle.onValueChanged.RemoveListener(new UnityAction<bool>(HandleNoFailToggle));
