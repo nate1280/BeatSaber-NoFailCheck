@@ -2,16 +2,14 @@
   "$schema": "https://raw.githubusercontent.com/nike4613/ModSaber-MetadataFileSchema/master/Schema.json",
   "author": "nate1280",
   "description": "Ever get tired of starting a song with No Fail on, and getting annoyed, let this mod annoy you instead to remind you!",
-  "gameVersion": "1.1.0p1",
+  "gameVersion": "1.3.0",
   "id": "NoFailCheck",
   "name": "NoFailCheck",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "dependsOn": {
-    "BS Utils": "^1.2.3",
     "CustomUI": "^1.5.4"
   },
   "loadAfter": [
-    "BS Utils",
     "CustomUI"
   ],
   "features": []
