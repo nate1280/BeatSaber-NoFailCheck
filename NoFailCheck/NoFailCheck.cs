@@ -35,6 +35,11 @@ namespace NoFailCheck
         internal static int NoFailPressCount = 0;
         internal static bool NoFailEnabled = false;
 
+        internal static bool IsInSoloFreeplay = false;
+
+        internal static MainMenuViewController MainMenuViewController;
+        internal static SoloFreePlayFlowCoordinator SoloFreePlayFlowCoordinator;
+
         private Button _playButton;
         private string _playButtonText;
         private RectOffset _playButtonPadding;
@@ -55,8 +60,52 @@ namespace NoFailCheck
                 BSEvents.levelSelected += BSEvents_levelSelected;
             }
 
+            MainMenuViewController = Resources.FindObjectsOfTypeAll<MainMenuViewController>().FirstOrDefault();
+            MainMenuViewController.didFinishEvent += MainMenuViewController_didFinishEvent;
+
+            SoloFreePlayFlowCoordinator = Resources.FindObjectsOfTypeAll<SoloFreePlayFlowCoordinator>().FirstOrDefault();
+            SoloFreePlayFlowCoordinator.didFinishEvent += SoloFreePlayFlowCoordinator_didFinishEvent;
+
             // setup settings
             SetupUI();
+        }
+
+        private void SoloFreePlayFlowCoordinator_didFinishEvent(SoloFreePlayFlowCoordinator obj)
+        {
+            IsInSoloFreeplay = false;
+            //Plugin.Log.Info($"SoloFreePlayFlowCoordinator was dismissed");
+        }
+
+        private void MainMenuViewController_didFinishEvent(MainMenuViewController vc, MainMenuViewController.MenuButton menuButton)
+        {
+            IsInSoloFreeplay = menuButton == MainMenuViewController.MenuButton.SoloFreePlay;
+            //Plugin.Log.Info($"MainMenuViewController Menu Button Pressed ==> {menuButton.ToString()}");
+
+            if (Plugin.cfg.Enabled)
+            {
+                if (IsInSoloFreeplay)
+                {
+                    foreach (var gameplayModifierToggle in _gameplayModifierToggles)
+                    {
+                        //Plugin.Log.Info($"{gameplayModifierToggle.gameplayModifier.name}");
+                        if (gameplayModifierToggle.gameplayModifier.name == "NoFailGameplayModifierParams")
+                        {
+                            // add listeners to modifier toggle
+                            gameplayModifierToggle.toggle.onValueChanged.RemoveListener(new UnityAction<bool>(HandleNoFailToggle));
+                            gameplayModifierToggle.toggle.onValueChanged.AddListener(new UnityAction<bool>(HandleNoFailToggle));
+
+                            // set initial state
+                            NoFailEnabled = gameplayModifierToggle.toggle.isOn;
+
+                            // exit loop, only 1 no fail toggle
+                            break;
+                        }
+                    }
+                }
+
+                // setup default button state
+                SetButtonState(NoFailEnabled);
+            }
         }
 
         private void BSEvents_levelSelected(LevelPackLevelsViewController vc, IPreviewBeatmapLevel level)
@@ -112,23 +161,6 @@ namespace NoFailCheck
                 // get gameplay modifier related objects
                 _gameplayModifiersPanelController = Resources.FindObjectsOfTypeAll<GameplayModifiersPanelController>().First();
                 _gameplayModifierToggles = _gameplayModifiersPanelController.GetComponentsInChildren<GameplayModifierToggle>();
-
-                foreach (var gameplayModifierToggle in _gameplayModifierToggles)
-                {
-                    //Plugin.Log.Info($"{gameplayModifierToggle.gameplayModifier.name}");
-                    if (gameplayModifierToggle.gameplayModifier.name == "NoFailGameplayModifierParams")
-                    {
-                        // add listeners to modifier toggle
-                        gameplayModifierToggle.toggle.onValueChanged.RemoveListener(new UnityAction<bool>(HandleNoFailToggle));
-                        gameplayModifierToggle.toggle.onValueChanged.AddListener(new UnityAction<bool>(HandleNoFailToggle));
-
-                        // set initial state
-                        NoFailEnabled = gameplayModifierToggle.toggle.isOn;
-
-                        // setup default button state
-                        SetButtonState(gameplayModifierToggle.toggle.isOn);
-                    }
-                }
             }
 
             initialized = true;
@@ -150,7 +182,7 @@ namespace NoFailCheck
         {
             if (Plugin.cfg.ChangeText)
             {
-                if (state)
+                if (state && IsInSoloFreeplay)
                 {
                     _playButton.SetTextPadding(new RectOffset(6, 6, 0, 0));
                     _playButton.SetButtonText("No Fail!");

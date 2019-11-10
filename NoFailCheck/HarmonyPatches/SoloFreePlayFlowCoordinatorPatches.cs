@@ -8,7 +8,7 @@ namespace NoFailCheck.HarmonyPatches
     {
         static bool Prefix(StandardLevelDetailViewController viewController)
         {
-            if (Plugin.cfg.Enabled)
+            if (Plugin.cfg.Enabled && NoFailCheck.IsInSoloFreeplay)
             {
                 if (NoFailCheck.NoFailEnabled)
                 {
