@@ -1,6 +1,4 @@
-﻿using CustomUI.BeatSaber;
-using CustomUI.Settings;
-using CustomUI.Utilities;
+﻿using BS_Utils.Utilities;
 using NoFailCheck.Extensions;
 using System;
 using System.Linq;
@@ -70,7 +68,7 @@ namespace NoFailCheck
             SetupUI();
         }
 
-        private void SoloFreePlayFlowCoordinator_didFinishEvent(SoloFreePlayFlowCoordinator obj)
+        private void SoloFreePlayFlowCoordinator_didFinishEvent(LevelSelectionFlowCoordinator obj)
         {
             IsInSoloFreeplay = false;
             //Plugin.Log.Info($"SoloFreePlayFlowCoordinator was dismissed");
@@ -87,8 +85,8 @@ namespace NoFailCheck
                 {
                     foreach (var gameplayModifierToggle in _gameplayModifierToggles)
                     {
-                        //Plugin.Log.Info($"{gameplayModifierToggle.gameplayModifier.name}");
-                        if (gameplayModifierToggle.gameplayModifier.name == "NoFailGameplayModifierParams")
+                        //Plugin.Log.Info($"{gameplayModifierToggle.gameplayModifier.modifierNameLocalizationKey}");
+                        if (gameplayModifierToggle.gameplayModifier.modifierNameLocalizationKey == "MODIFIER_NO_FAIL")
                         {
                             // add listeners to modifier toggle
                             gameplayModifierToggle.toggle.onValueChanged.RemoveListener(new UnityAction<bool>(HandleNoFailToggle));
@@ -108,7 +106,7 @@ namespace NoFailCheck
             }
         }
 
-        private void BSEvents_levelSelected(LevelPackLevelsViewController vc, IPreviewBeatmapLevel level)
+        private void BSEvents_levelSelected(LevelCollectionViewController vc, IPreviewBeatmapLevel level)
         {
             if (NoFailPressCount != 0)
             {
@@ -120,33 +118,6 @@ namespace NoFailCheck
         private void SetupUI()
         {
             if (initialized) return;
-
-            // setup settings
-            RectTransform mainMenu = (Resources.FindObjectsOfTypeAll<MainMenuViewController>().First().rectTransform);
-
-            // create submenu for Versus settings
-            var noFailCheckSubMenu = SettingsUI.CreateSubMenu("NoFail Check");
-
-            // add option for enabling
-            var isEnabled = noFailCheckSubMenu.AddBool("Enabled", "Enable or disable the NoFail check when playing a song.");
-            isEnabled.EnabledText = "YES";
-            isEnabled.DisabledText = "NO";
-            isEnabled.GetValue += () => { return Plugin.cfg.Enabled; };
-            isEnabled.SetValue += (v) => { Plugin.cfg.Set("Enabled", v); };
-
-            // add option for requiring double press
-            var doublePress = noFailCheckSubMenu.AddBool("Required Double Press", "If No Fail is enabled, require a double press of Play to start song.");
-            doublePress.EnabledText = "YES";
-            doublePress.DisabledText = "NO";
-            doublePress.GetValue += () => { return Plugin.cfg.DoublePress; };
-            doublePress.SetValue += (v) => { Plugin.cfg.Set("DoublePress", v); };
-
-            // add option for changing button text
-            var changeText = noFailCheckSubMenu.AddBool("Change Play Button Text", "Change the Play button's text when No Fail is enabled.");
-            changeText.EnabledText = "YES";
-            changeText.DisabledText = "NO";
-            changeText.GetValue += () => { return Plugin.cfg.ChangeText; };
-            changeText.SetValue += (v) => { Plugin.cfg.Set("ChangeText", v); };
 
             if (Plugin.cfg.Enabled)
             {
@@ -180,7 +151,7 @@ namespace NoFailCheck
 
         private void SetButtonState(bool state)
         {
-            if (Plugin.cfg.ChangeText)
+            if (Plugin.cfg.ChangeText && _playButton != null)
             {
                 if (state && IsInSoloFreeplay)
                 {

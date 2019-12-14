@@ -1,0 +1,5 @@
+﻿<settings-container>
+  <bool-setting text='Enabled' value='enabled' hover-hint='Enable or disable the NoFail check when playing a song.'></bool-setting>
+  <bool-setting text='Required Double Press' value='double-press' hover-hint='If No Fail is enabled, require a double press of Play to start song.'></bool-setting>
+  <bool-setting text='Change Play Button Text' value='change-text' hover-hint="Change the Play button's text when No Fail is enabled"></bool-setting>
+</settings-container>

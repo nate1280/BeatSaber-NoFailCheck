@@ -2,11 +2,11 @@
 
 namespace NoFailCheck.HarmonyPatches
 {
-    [HarmonyPatch(typeof(SoloFreePlayFlowCoordinator))]
-    [HarmonyPatch("HandleLevelDetailViewControllerDidPressPlayButton", MethodType.Normal)]
+    [HarmonyPatch(typeof(LevelSelectionFlowCoordinator))]
+    [HarmonyPatch("HandleLevelSelectionNavigationControllerDidPressPlayButton", MethodType.Normal)]
     class SoloFreePlayFlowCoordinatorPatches
     {
-        static bool Prefix(StandardLevelDetailViewController viewController)
+        static bool Prefix(LevelSelectionNavigationController viewController)
         {
             if (Plugin.cfg.Enabled && NoFailCheck.IsInSoloFreeplay)
             {

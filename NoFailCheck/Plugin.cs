@@ -3,8 +3,10 @@ using IPA;
 using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
 using System.IO;
-using CustomUI.Utilities;
 using Harmony;
+using BS_Utils.Utilities;
+using BeatSaberMarkupLanguage.Settings;
+using NoFailCheck.UI;
 
 namespace NoFailCheck
 {
@@ -44,6 +46,10 @@ namespace NoFailCheck
 
         private void OnMenuSceneLoadedFresh()
         {
+            // add BSML mod settings
+            BSMLSettings.instance.AddSettingsMenu("NoFail Check", "NoFailCheck.Views.NoFailCheckSettings.bsml", NoFailCheckSettings.instance);
+
+            // load main mod
             NoFailCheck.Instance.OnLoad();
         }
 
