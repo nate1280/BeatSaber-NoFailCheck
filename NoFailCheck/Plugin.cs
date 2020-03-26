@@ -1,32 +1,34 @@
 ﻿using System;
 using IPA;
-using UnityEngine.SceneManagement;
-using IPALogger = IPA.Logging.Logger;
+using Logger = IPA.Logging.Logger;
 using System.IO;
-using Harmony;
+using HarmonyLib;
 using BS_Utils.Utilities;
 using BeatSaberMarkupLanguage.Settings;
 using NoFailCheck.UI;
 
 namespace NoFailCheck
 {
-    public class Plugin : IBeatSaberPlugin
+    [Plugin(RuntimeOptions.SingleStartInit)]
+    public class Plugin
     {
-        public static SemVer.Version Version => IPA.Loader.PluginManager.GetPlugin("NoFailCheck").Metadata.Version;
+        public static SemVer.Version Version => IPA.Loader.PluginManager.GetPlugin("NoFailCheck").Version;
 
-        internal static HarmonyInstance harmony;
+        internal static Harmony harmony;
 
-        public static IPALogger Log { get; internal set; }
+        public static Logger Log { get; internal set; }
 
         public static Settings cfg;
         public static string DataPath = Path.Combine(Environment.CurrentDirectory, "UserData");
 
-        public void Init(object thisIsNull, IPALogger log)
+        [Init]
+        public void Init(Logger log)
         {
             Log = log;
         }
 
-        public void OnApplicationStart()
+        [OnStart]
+        public void OnStart()
         {
             // create userdata path if needed
             if (!Directory.Exists(DataPath))
@@ -34,7 +36,7 @@ namespace NoFailCheck
                 Directory.CreateDirectory(DataPath);
             }
 
-            harmony = HarmonyInstance.Create("com.nate1280.BeatSaber.NoFailCheck");
+            harmony = new Harmony("com.nate1280.BeatSaber.NoFailCheck");
             harmony.PatchAll(System.Reflection.Assembly.GetExecutingAssembly());
 
             // load settings
@@ -53,23 +55,10 @@ namespace NoFailCheck
             NoFailCheck.Instance.OnLoad();
         }
 
-        public void OnActiveSceneChanged(Scene prevScene, Scene nextScene) { }
-
-        public void OnSceneLoaded(Scene scene, LoadSceneMode arg1) { }
-
-        public void OnSceneUnloaded(Scene scene) { }
-
-        public void OnApplicationQuit()
+        [OnExit]
+        public void OnExit()
         {
             harmony.UnpatchAll("com.nate1280.BeatSaber.NoFailCheck");
         }
-
-        public void OnLevelWasLoaded(int level) { }
-
-        public void OnLevelWasInitialized(int level) { }
-
-        public void OnUpdate() { }
-
-        public void OnFixedUpdate() { }
     }
 }
