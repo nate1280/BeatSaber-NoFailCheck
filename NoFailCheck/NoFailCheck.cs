@@ -36,6 +36,7 @@ namespace NoFailCheck
         internal static bool IsInSoloFreeplay = false;
 
         internal static MainMenuViewController MainMenuViewController;
+        internal static PromoViewController PromoViewController;
         internal static SoloFreePlayFlowCoordinator SoloFreePlayFlowCoordinator;
 
         private Button _playButton;
@@ -61,6 +62,10 @@ namespace NoFailCheck
             MainMenuViewController = Resources.FindObjectsOfTypeAll<MainMenuViewController>().FirstOrDefault();
             MainMenuViewController.didFinishEvent += MainMenuViewController_didFinishEvent;
 
+            // get PromoViewController
+            PromoViewController = Resources.FindObjectsOfTypeAll<PromoViewController>().FirstOrDefault();
+            PromoViewController.promoButtonWasPressedEvent += PromoViewController_promoButtonWasPressedEvent;
+
             SoloFreePlayFlowCoordinator = Resources.FindObjectsOfTypeAll<SoloFreePlayFlowCoordinator>().FirstOrDefault();
             SoloFreePlayFlowCoordinator.didFinishEvent += SoloFreePlayFlowCoordinator_didFinishEvent;
 
@@ -72,6 +77,12 @@ namespace NoFailCheck
         {
             IsInSoloFreeplay = false;
             //Plugin.Log.Info($"SoloFreePlayFlowCoordinator was dismissed");
+        }
+
+        private void PromoViewController_promoButtonWasPressedEvent(PromoViewController promoViewController, IAnnotatedBeatmapLevelCollection annotatedBeatmapLevelCollection, IPreviewBeatmapLevel previewBeatmapLevel)
+        {
+            IsInSoloFreeplay = true;
+            //Plugin.Log.Info($"Promo button was pressed, transitioning to SoloFreePlayController");
         }
 
         private void MainMenuViewController_didFinishEvent(MainMenuViewController vc, MainMenuViewController.MenuButton menuButton)
