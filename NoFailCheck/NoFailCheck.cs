@@ -2,6 +2,7 @@
 using NoFailCheck.Extensions;
 using System;
 using System.Linq;
+using Polyglot;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -38,11 +39,8 @@ namespace NoFailCheck
         internal static MainMenuViewController MainMenuViewController;
         internal static PromoViewController PromoViewController;
         internal static SoloFreePlayFlowCoordinator SoloFreePlayFlowCoordinator;
+        internal static StandardLevelDetailView StandardLevelDetailView;
 
-        private Button _playButton;
-        private string _playButtonText;
-        private RectOffset _playButtonPadding;
-        //private Color _playButtonColour;
         private GameplayModifiersPanelController _gameplayModifiersPanelController;
         private GameplayModifierToggle[] _gameplayModifierToggles;
 
@@ -68,6 +66,8 @@ namespace NoFailCheck
 
             SoloFreePlayFlowCoordinator = Resources.FindObjectsOfTypeAll<SoloFreePlayFlowCoordinator>().FirstOrDefault();
             SoloFreePlayFlowCoordinator.didFinishEvent += SoloFreePlayFlowCoordinator_didFinishEvent;
+
+            StandardLevelDetailView = Resources.FindObjectsOfTypeAll<StandardLevelDetailView>().LastOrDefault(v => v.name.IndexOf("Clone", StringComparison.OrdinalIgnoreCase) == -1);
 
             // setup settings
             SetupUI();
@@ -132,15 +132,6 @@ namespace NoFailCheck
 
             if (Plugin.cfg.Enabled)
             {
-                // get the play button
-                _playButton = Resources.FindObjectsOfTypeAll<Button>().First(x => string.Equals(x.name, "PlayButton", StringComparison.OrdinalIgnoreCase) && string.Equals(x.transform.parent.name, "PlayButtons", StringComparison.OrdinalIgnoreCase) && string.Equals(x.transform.root.name, "Wrapper", StringComparison.OrdinalIgnoreCase));
-
-                // save default values
-                _playButtonText = _playButton.GetButtonText();
-                _playButtonPadding = _playButton.GetTextPaddingConstraints();
-                //_playButtonColour = _playButton.GetBorderColor();
-
-                // get gameplay modifier related objects
                 _gameplayModifiersPanelController = Resources.FindObjectsOfTypeAll<GameplayModifiersPanelController>().First();
                 _gameplayModifierToggles = _gameplayModifiersPanelController.GetComponentsInChildren<GameplayModifierToggle>();
             }
@@ -162,20 +153,15 @@ namespace NoFailCheck
 
         private void SetButtonState(bool state)
         {
-            if (Plugin.cfg.ChangeText && _playButton != null)
+            if (!Plugin.cfg.ChangeText || StandardLevelDetailView == null) return;
+
+            if (state && IsInSoloFreeplay)
             {
-                if (state && IsInSoloFreeplay)
-                {
-                    _playButton.SetTextPadding(new RectOffset(6, 6, 0, 0));
-                    _playButton.SetButtonText("No Fail!");
-                    //_playButton.SetBorderColor(Color.cyan);
-                }
-                else
-                {
-                    _playButton.SetTextPadding(_playButtonPadding);
-                    _playButton.SetButtonText(_playButtonText);
-                    //_playButton.SetBorderColor(_playButtonColour);
-                }
+                StandardLevelDetailView.actionButton.SetButtonText("No Fail!");
+            }
+            else
+            {
+                StandardLevelDetailView.actionButton.SetButtonText(Localization.Get("BUTTON_PLAY"));
             }
         }
     }

@@ -43,10 +43,10 @@ namespace NoFailCheck
             cfg = Settings.Load();
 
             BSEvents.OnLoad();
-            BSEvents.menuSceneLoadedFresh += OnMenuSceneLoadedFresh;
+            BSEvents.lateMenuSceneLoadedFresh += lateMenuSceneLoadedFresh;
         }
 
-        private void OnMenuSceneLoadedFresh()
+        private void lateMenuSceneLoadedFresh(ScenesTransitionSetupDataSO obj)
         {
             // add BSML mod settings
             BSMLSettings.instance.AddSettingsMenu("NoFail Check", "NoFailCheck.Views.NoFailCheckSettings.bsml", NoFailCheckSettings.instance);

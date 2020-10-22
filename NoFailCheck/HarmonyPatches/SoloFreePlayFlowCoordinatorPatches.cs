@@ -3,7 +3,7 @@
 namespace NoFailCheck.HarmonyPatches
 {
     [HarmonyPatch(typeof(LevelSelectionFlowCoordinator))]
-    [HarmonyPatch("HandleLevelSelectionNavigationControllerDidPressPlayButton", MethodType.Normal)]
+    [HarmonyPatch("HandleLevelSelectionNavigationControllerDidPressActionButton", MethodType.Normal)]
     class SoloFreePlayFlowCoordinatorPatches
     {
         static bool Prefix(LevelSelectionNavigationController viewController)

@@ -36,10 +36,15 @@
     <Reference Include="0Harmony">
       <HintPath>C:\Games\Steam\steamapps\common\Beat Saber\Libs\0Harmony.dll</HintPath>
     </Reference>
+    <Reference Include="BeatmapCore, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Games\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\BeatmapCore.dll</HintPath>
+    </Reference>
     <Reference Include="BSML">
       <HintPath>C:\Games\Steam\steamapps\common\Beat Saber\Plugins\BSML.dll</HintPath>
     </Reference>
-    <Reference Include="BS_Utils">
+    <Reference Include="BS_Utils, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Games\Steam\steamapps\common\Beat Saber\Plugins\BS_Utils.dll</HintPath>
     </Reference>
     <Reference Include="HMLib, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -85,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ButtonExtensions.cs" />
+    <Compile Include="HarmonyPatches\StandardLevelDetailViewControllerPatches.cs" />
     <Compile Include="HarmonyPatches\SoloFreePlayFlowCoordinatorPatches.cs" />
     <Compile Include="NoFailCheck.cs" />
     <Compile Include="Plugin.cs" />
