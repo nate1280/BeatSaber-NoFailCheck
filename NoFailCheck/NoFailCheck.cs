@@ -97,7 +97,7 @@ namespace NoFailCheck
                     foreach (var gameplayModifierToggle in _gameplayModifierToggles)
                     {
                         //Plugin.Log.Info($"{gameplayModifierToggle.gameplayModifier.modifierNameLocalizationKey}");
-                        if (gameplayModifierToggle.gameplayModifier.modifierNameLocalizationKey == "MODIFIER_NO_FAIL")
+                        if (gameplayModifierToggle.gameplayModifier.modifierNameLocalizationKey == "MODIFIER_NO_FAIL_ON_0_ENERGY")
                         {
                             // add listeners to modifier toggle
                             gameplayModifierToggle.toggle.onValueChanged.RemoveListener(new UnityAction<bool>(HandleNoFailToggle));
