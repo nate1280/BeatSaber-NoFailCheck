@@ -58,7 +58,7 @@ namespace NoFailCheck
         [OnExit]
         public void OnExit()
         {
-            harmony.UnpatchAll("com.nate1280.BeatSaber.NoFailCheck");
+            harmony.UnpatchSelf();
         }
     }
 }
