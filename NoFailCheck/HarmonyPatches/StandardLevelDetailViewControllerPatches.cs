@@ -12,14 +12,13 @@ namespace NoFailCheck.HarmonyPatches
         typeof(bool),
         typeof(bool),
         typeof(bool),
-        typeof(bool),
         typeof(string),
         typeof(BeatmapDifficultyMask),
         typeof(BeatmapCharacteristicSO[])
     })]
     class StandardLevelDetailViewControllerPatches
     {
-        static bool Prefix(IBeatmapLevelPack pack, IPreviewBeatmapLevel previewBeatmapLevel, bool showPlayerStats, bool hidePracticeButton, bool hide360DegreeBeatmapCharacteristic, bool canBuyPack, ref string playButtonText, BeatmapDifficultyMask allowedBeatmapDifficultyMask, BeatmapCharacteristicSO[] notAllowedCharacteristics)
+        static bool Prefix(IBeatmapLevelPack pack, IPreviewBeatmapLevel previewBeatmapLevel, bool hidePracticeButton, bool hide360DegreeBeatmapCharacteristic, bool canBuyPack, ref string playButtonText, BeatmapDifficultyMask allowedBeatmapDifficultyMask, BeatmapCharacteristicSO[] notAllowedCharacteristics)
         {
             if (Plugin.cfg.Enabled && NoFailCheck.IsInSoloFreeplay)
             {
